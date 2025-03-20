@@ -1,4 +1,4 @@
-# Bird Sightings Finder
+# WingWatch
 
 A web application that helps users find bird sightings in their area using the eBird API. Users can search for bird sightings by location, specify a search radius, and filter by specific bird species.
 
