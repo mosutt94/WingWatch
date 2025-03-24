@@ -1,16 +1,22 @@
 const axios = require('axios');
 
 exports.handler = async function(event, context) {
+  // Only allow GET requests
   if (event.httpMethod !== 'GET') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: 'Method Not Allowed' })
+    };
   }
 
   try {
-    const path = event.path.replace('/api/ebird/', '');
+    // Extract the path from the request
+    const path = event.path.replace('/.netlify/functions/api/ebird/', '');
     const queryParams = event.queryStringParameters || {};
     
     console.log('Proxying request to:', `https://api.ebird.org/v2/${path}`);
     
+    // Make the request to eBird API
     const response = await axios.get(`https://api.ebird.org/v2/${path}`, {
       params: queryParams,
       headers: {
@@ -18,6 +24,7 @@ exports.handler = async function(event, context) {
       }
     });
 
+    // Return the response
     return {
       statusCode: 200,
       headers: {
@@ -29,6 +36,7 @@ exports.handler = async function(event, context) {
   } catch (error) {
     console.error('API Error:', error.response?.data || error.message);
     
+    // Return appropriate error response
     return {
       statusCode: error.response?.status || 500,
       headers: {
