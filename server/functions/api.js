@@ -6,8 +6,10 @@ exports.handler = async function(event, context) {
   }
 
   try {
-    const path = event.path.replace('/api/', '');
+    const path = event.path.replace('/api/ebird/', '');
     const queryParams = event.queryStringParameters || {};
+    
+    console.log('Proxying request to:', `https://api.ebird.org/v2/${path}`);
     
     const response = await axios.get(`https://api.ebird.org/v2/${path}`, {
       params: queryParams,
